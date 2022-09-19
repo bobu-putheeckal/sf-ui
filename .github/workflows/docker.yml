@@ -52,7 +52,7 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/sf-demo-ui:${{  github.sha }} .
-          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/sf-demo-ui:${{  github.sha }}
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/sf-demo-ui:latest .
-          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/sf-demo-ui:latest
+          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:${{  github.sha }} .
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:${{  github.sha }}
+          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:latest .
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:latest
