@@ -10,49 +10,24 @@ env:
   REGION: us-east1
 
 jobs:
-  # sonarcloud:
-  #   name: SonarCloud - Static Code analysis
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@master
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   docker:
-    # needs: sonarcloud
     name: Docker Build and Push
     runs-on: ubuntu-latest
 
-    # Add "id-token" with the intended permissions.
-    permissions:
-      contents: "read"
-      id-token: "write"
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # Configure Workload Identity Federation and generate an access token.
-      # Alternative option - authentication via credentials json
-      - id: "auth"
-        uses: "google-github-actions/auth@v0"
-        with:
-          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
-
-      # Setup gcloud CLI
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
-
-      - name: Authorize Docker push
-        run: gcloud auth configure-docker
-
-      - name: Build and Push Container
-        run: |-
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:${{  github.sha }} .
-          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:${{  github.sha }}
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:latest .
-          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/ui:latest
+      - uses: actions/checkout@v2
+      - name: Docker Hub Login
+        env:
+          DOCKER_USER : ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD : ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Docker Build
+        run : |-
+          docker build -t bobput/sf-demo-ui:latest .
+          docker build -t bobput/sf-demo-ui:${{ github.sha }} .
+      - name: Docker Push
+        run : |-
+          docker push bobput/sf-demo-ui:latest
+          docker push bobput/sf-demo-ui:${{ github.sha }}
+    
