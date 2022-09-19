@@ -20,11 +20,11 @@ describe('AppComponent', () => {
   //   expect(app).toBeTruthy();
   // });
 
-  // it(`should have as title 'Angular With Node JS & Redis'`, () => {
+  // it(`should have as title 'SF Demo'`, () => {
   //   const fixture = TestBed.createComponent(AppComponent);
   //   const app = fixture.componentInstance;
   //   console.log(app.title)
-  //   expect(app.title).toEqual('Angular With Node JS & Redis');
+  //   expect(app.title).toEqual('SF Demo');
   // });
 
   // it('should render title', () => {
